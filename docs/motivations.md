@@ -39,7 +39,16 @@ parallel checks and needs specific to amgen (eg passing all requirements to subm
 
 ## Dependency analysis
 
-To use the tooling provided in the r-lib organization, shows dependencies of 55 packages on CRAN and 19 packages on github.
+To use the tooling provided in the r-lib organization, shows dependencies of 55 packages on CRAN and 19 packages on github. This
+dependency set is currently unstable and undergoing extensive iteration. Inclusion of any piece brings inherent risk
+as the SDLC across the r-lib organization is not formally defined and packages frequently become out of date (at least temporarily)
+until the next update cycle.
+
+The user stories identified do not present any pressing implementation need from the organization packages that would require
+significant (> 5 day) re-write under the new proposal. Hence, the recommendation is to not use any packages for now.
+
+This may change to expose and use some of the parsing or processing capabilities for summaries or other metadata management. Likewise,
+as these packages mature they may be leveraged as a component of the parallelization infrastructure if value-add can be demonstrated.
 
 The following dependency tree was constructed representing the dependency tree based on utilizing the following packages
 from `r-lib` organization
