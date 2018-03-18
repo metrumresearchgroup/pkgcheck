@@ -137,3 +137,63 @@ OK: 1 SKIPPED: 0 FAILED: 0
 * `NOT_CRAN` - allows tests to take arbitrary amounts of time
 
 https://stackoverflow.com/questions/24387660/how-to-change-libpaths-permanently-in-r
+
+
+### Help Docs
+
+```text
+Usage: R CMD check [options] pkgs
+
+Check R packages from package sources, which can be directories or
+package 'tar' archives with extension '.tar.gz', '.tar.bz2',
+'.tar.xz' or '.tgz'.
+
+A variety of diagnostic checks on directory structure, index and
+control files are performed.  The package is installed into the log
+directory and production of the package PDF manual is tested.
+All examples and tests provided by the package are tested to see if
+they run successfully.  By default code in the vignettes is tested,
+as is re-building the vignette PDFs.
+
+Options:
+  -h, --help            print short help message and exit
+  -v, --version         print version info and exit
+  -l, --library=LIB     library directory used for test installation
+                        of packages (default is outdir)
+  -o, --output=DIR      directory for output, default is current directory.
+                        Logfiles, R output, etc. will be placed in 'pkg.Rcheck'
+                        in this directory, where 'pkg' is the name of the
+                        checked package
+      --no-clean        do not clean 'outdir' before using it
+      --no-codoc        do not check for code/documentation mismatches
+      --no-examples     do not run the examples in the Rd files
+      --no-install      skip installation and associated tests
+      --no-tests        do not run code in 'tests' subdirectory
+      --no-manual       do not produce the PDF manual
+      --no-vignettes    do not run R code in vignettes nor build outputs
+      --no-build-vignettes    do not build vignette outputs
+      --ignore-vignettes    skip all tests on vignettes
+      --run-dontrun     do run \dontrun sections in the Rd files
+      --run-donttest    do run \donttest sections in the Rd files
+      --use-gct         use 'gctorture(TRUE)' when running examples/tests
+      --use-valgrind    use 'valgrind' when running examples/tests/vignettes
+      --timings         record timings for examples
+      --install-args=   command-line args to be passed to INSTALL
+      --test-dir=       look in this subdirectory for test scripts (default tests)
+      --no-stop-on-test-error   do not stop running tests after first error
+      --check-subdirs=default|yes|no
+                        run checks on the package subdirectories
+                        (default is yes for a tarball, no otherwise)
+      --as-cran         select customizations similar to those used
+                        for CRAN incoming checking
+
+The following options apply where sub-architectures are in use:
+      --extra-arch      do only runtime tests needed for an additional
+                        sub-architecture.
+      --multiarch       do runtime tests on all installed sub-archs
+      --no-multiarch    do runtime tests only on the main sub-architecture
+      --force-multiarch run tests on all sub-archs even for packages
+                        with no compiled code
+
+By default, all test sections are turned on.
+```
