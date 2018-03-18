@@ -128,3 +128,12 @@ OK: 1 SKIPPED: 0 FAILED: 0
 ## Settings
 
 * `--as-cran` - sets the check scenario to run as it will on CRAN
+
+### Environment Variables
+
+* `R_LIBS` - library paths R will look for packages
+  * The library search path is initialized at startup from the environment variable 'R_LIBS' (which should be a colon-separated list of directories at which R library trees are rooted) followed by those in environment variable 'R_LIBS_USER'. Only directories which exist at the time will be included.
+* `R_TESTS` - ?
+* `NOT_CRAN` - allows tests to take arbitrary amounts of time
+
+https://stackoverflow.com/questions/24387660/how-to-change-libpaths-permanently-in-r
