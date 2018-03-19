@@ -4,8 +4,8 @@
 [[projects]]
   name = "github.com/dpastoor/goutils"
   packages = ["."]
-  revision = "446fcf8ee1c6138064e7c40104ea0453237ec7e8"
-  version = "v1.0.1"
+  revision = "b1109ca8c7d0fe327cefc75e82316da1c0a4e3d1"
+  version = "v1.0.2"
 
 [[projects]]
   name = "github.com/fsnotify/fsnotify"
@@ -120,6 +120,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "df28ce21d5b7019bd86b78b7ee330a71e7533252e44bb82ffba28f9d5c94a959"
+  inputs-digest = "7aee6a6f93eb8b6cfb05d7577f055f1d6cdb2741c7514f4c9aac5431593f2ca1"
   solver-name = "gps-cdcl"
   solver-version = 1
