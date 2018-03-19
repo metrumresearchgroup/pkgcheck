@@ -4,8 +4,8 @@
 [[projects]]
   name = "github.com/dpastoor/goutils"
   packages = ["."]
-  revision = "e154983040c9ff91cc53b341b2c75b2ef7a9effb"
-  version = "v1.0.0"
+  revision = "446fcf8ee1c6138064e7c40104ea0453237ec7e8"
+  version = "v1.0.1"
 
 [[projects]]
   name = "github.com/fsnotify/fsnotify"
@@ -96,7 +96,7 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "2f1e207ee39ff70f3433e49c6eb52677a515e3b5"
+  revision = "01acb38716e021ed1fc03a602bdb5838e1358c5e"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -120,6 +120,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e30aff44219d837f97b556c46703d6cd52c63323c88b9fabe828738c038301db"
+  inputs-digest = "df28ce21d5b7019bd86b78b7ee330a71e7533252e44bb82ffba28f9d5c94a959"
   solver-name = "gps-cdcl"
   solver-version = 1
