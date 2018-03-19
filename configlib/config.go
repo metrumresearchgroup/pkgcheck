@@ -60,7 +60,9 @@ func loadDefaultSettings() {
 	viper.SetDefault("logLevel", "Warn")
 	// path to R on system, defaults to R in path
 	viper.SetDefault("rpath", "R")
+	viper.SetDefault("output", "pkcresults")
 	viper.SetDefault("threads", runtime.NumCPU())
+
 }
 
 func expand(s string) string {
