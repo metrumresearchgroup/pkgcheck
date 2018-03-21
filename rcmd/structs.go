@@ -1,6 +1,13 @@
 package rcmd
 
-// Rsettings controls settings related to managing libraries
+// Package stores information about the package
+type Package struct {
+	Name string
+	// this should eventually be some semver type or something hopefully
+	Version string
+}
+
+// RSettings controls settings related to managing libraries
 type RSettings struct {
 	LibPaths []string
 	Rpath    string
