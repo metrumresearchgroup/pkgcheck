@@ -11,7 +11,6 @@ type Package struct {
 type RSettings struct {
 	LibPaths []string
 	Rpath    string
-	LibDirs  []string
 }
 
 // CheckSettings defines settings related to R CMD CHECK
