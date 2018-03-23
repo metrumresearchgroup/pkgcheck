@@ -38,23 +38,32 @@ func Check(
 	cmdArgs = append(cmdArgs, cs.TarPath)
 	cmdFlags := cs.CmdFlags()
 	cmdArgs = append(cmdArgs, cmdFlags...)
+
+	envVars := os.Environ()
+	ok, rLibsSite := rs.LibPathsEnv()
+	if ok {
+		envVars = append(envVars, rLibsSite)
+	}
+
 	lg.WithFields(
 		logrus.Fields{
 			"Package":       cs.Package().Name,
 			"CheckSettings": cs,
 			"RSettings":     rs,
+			"env":           rLibsSite,
 		}).Debug(cmdArgs)
-
-	if preview {
-		return nil
-	}
 
 	cmd := exec.Command(
 		rs.R(),
 		cmdArgs...,
 	)
-	// set directory for the shell to relevant directory
-	//cmd.Dir = modelDir
+
+	cmd.Env = envVars
+
+	if preview {
+		return nil
+	}
+
 	cmdReader, err := cmd.StdoutPipe()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error creating StdoutPipe for Cmd", err)
