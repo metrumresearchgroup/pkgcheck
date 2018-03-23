@@ -3,12 +3,12 @@ package rcmd
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 
 	"github.com/dpastoor/goutils"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/afero"
 )
 
@@ -17,18 +17,44 @@ import (
 // libDir library directory
 func Check(
 	fs afero.Fs,
-	libDir string,
+	cs CheckSettings,
+	rs RSettings,
+	lg *logrus.Logger,
+	preview bool,
 ) error {
-	ok, err := goutils.DirExists(fs, libDir)
-	if !ok || err != nil {
-		//TODO: change these exits to instead just return an error probably
-		log.Printf("could not find directory to run model %s, ERR: %s, ok: %v", libDir, err, ok)
+	ok, err := goutils.Exists(fs, cs.TarPath)
+	if err != nil {
+		lg.Errorf("error in checking for TarPath at: %s", cs.TarPath)
 		return err
 	}
-	cmdArgs := []string{}
-	cmd := exec.Command("R CMD", cmdArgs...)
+	if !ok {
+		lg.Errorf("no tarball specified at %s", cs.TarPath)
+		return fmt.Errorf("no tarball at %s", cs.TarPath)
+	}
+	cmdArgs := []string{
+		"CMD",
+		"check",
+	}
+	cmdArgs = append(cmdArgs, cs.TarPath)
+	cmdFlags := cs.CmdFlags()
+	cmdArgs = append(cmdArgs, cmdFlags...)
+	lg.WithFields(
+		logrus.Fields{
+			"Package":       cs.Package().Name,
+			"CheckSettings": cs,
+			"RSettings":     rs,
+		}).Debug(cmdArgs)
+
+	if preview {
+		return nil
+	}
+
+	cmd := exec.Command(
+		rs.R(),
+		cmdArgs...,
+	)
 	// set directory for the shell to relevant directory
-	cmd.Dir = modelDir
+	//cmd.Dir = modelDir
 	cmdReader, err := cmd.StdoutPipe()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error creating StdoutPipe for Cmd", err)
@@ -39,13 +65,13 @@ func Check(
 	}
 	scanner := bufio.NewScanner(cmdReader)
 	errScanner := bufio.NewScanner(errReader)
-	outputFile, err := os.Create(filepath.Join(modelDir, "stdout.out"))
+	outputFile, err := os.Create(filepath.Join(cs.OutputDir, fmt.Sprintf("%s_stdout.out", cs.Package().Name)))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "could not make stdout file to pipe output to")
 	} else {
 		defer outputFile.Close()
 	}
-	errOutputFile, err := os.Create(filepath.Join(modelDir, "stderr.out"))
+	errOutputFile, err := os.Create(filepath.Join(cs.OutputDir, fmt.Sprintf("%s_stderr.out", cs.Package().Name)))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "could not make stderr file to pipe output to")
 	} else {
@@ -77,12 +103,12 @@ func Check(
 	defer errOutputFileWriter.Flush()
 	err = cmd.Start()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error starting Cmd", err)
+		lg.Errorf("Error starting Cmd", err)
 		return err
 	}
 	err = cmd.Wait()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error attempting to run model, check the lst file in the run directory for more details", err)
+		lg.Errorf("Cmd failed with error: %s", err)
 		return err
 	}
 	return nil

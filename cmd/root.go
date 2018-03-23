@@ -53,9 +53,11 @@ func init() {
 	// will be global for your application.
 
 	RootCmd.PersistentFlags().String("config", "", "config file (default is $HOME/pkgcheck.toml)")
+	RootCmd.PersistentFlags().String("libPaths", "", "library paths, colon separated list")
 	RootCmd.PersistentFlags().Int("threads", 0, "number of threads to execute with")
 	RootCmd.PersistentFlags().Bool("preview", false, "preview action, but don't actually run command")
 	viper.BindPFlag("config", RootCmd.PersistentFlags().Lookup("config"))
+	viper.BindPFlag("libPaths", RootCmd.PersistentFlags().Lookup("libPaths"))
 	viper.BindPFlag("threads", RootCmd.PersistentFlags().Lookup("threads"))
 	viper.BindPFlag("preview", RootCmd.PersistentFlags().Lookup("preview"))
 	// Cobra also supports local flags, which will only run
