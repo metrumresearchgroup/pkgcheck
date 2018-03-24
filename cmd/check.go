@@ -35,7 +35,7 @@ var checkCmd = &cobra.Command{
 	Long: `
 	pkc check <pkg tarball> 
 	pkc check <pkg dir> --threads=4 //check on 4 threads
-	pkc check <pkg tarball> --libDir="<somedir>"
+	pkc check <pkg tarball> --libpaths=<somedir(s)>
  `,
 	RunE: run,
 }
