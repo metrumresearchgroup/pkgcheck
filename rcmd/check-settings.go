@@ -17,9 +17,6 @@ func (cs CheckSettings) CmdFlags() []string {
 		"--no-build-vignettes",
 	}
 
-	if cs.Vanilla {
-		output = append(output, "--vanilla")
-	}
 	if cs.Cran {
 		output = append(output, "--as-cran")
 	}
