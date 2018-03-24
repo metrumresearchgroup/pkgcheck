@@ -51,15 +51,16 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports Persistent Flags, which, if defined here,
 	// will be global for your application.
-
 	RootCmd.PersistentFlags().String("config", "", "config file (default is $HOME/pkgcheck.toml)")
-	RootCmd.PersistentFlags().String("libPaths", "", "library paths, colon separated list")
+	RootCmd.PersistentFlags().String("libpaths", "", "library paths, colon separated list")
 	RootCmd.PersistentFlags().Int("threads", 0, "number of threads to execute with")
 	RootCmd.PersistentFlags().Bool("preview", false, "preview action, but don't actually run command")
+	RootCmd.PersistentFlags().Bool("debug", false, "use debug mode")
 	viper.BindPFlag("config", RootCmd.PersistentFlags().Lookup("config"))
-	viper.BindPFlag("libPaths", RootCmd.PersistentFlags().Lookup("libPaths"))
+	viper.BindPFlag("libpaths", RootCmd.PersistentFlags().Lookup("libpaths"))
 	viper.BindPFlag("threads", RootCmd.PersistentFlags().Lookup("threads"))
 	viper.BindPFlag("preview", RootCmd.PersistentFlags().Lookup("preview"))
+	viper.BindPFlag("debug", RootCmd.PersistentFlags().Lookup("debug"))
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 }
@@ -69,13 +70,14 @@ func initConfig() {
 	// if cfgFile != "" { // enable ability to specify config file via flag
 	// 	viper.SetConfigFile(cfgFile)
 	// }
-	// TODO: set config a little more flexibly
 	if viper.GetString("config") == "" {
 		_ = configlib.LoadGlobalConfig("pkgcheck")
 	} else {
 		_ = configlib.LoadConfigFromPath(viper.GetString("config"))
 	}
-	viper.Debug()
+	if viper.GetBool("debug") {
+		viper.Debug()
+	}
 }
 
 func expand(s string) string {
