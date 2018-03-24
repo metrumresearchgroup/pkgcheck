@@ -17,6 +17,8 @@ package cmd
 import (
 	"fmt"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/dpastoor/goutils"
 
@@ -34,6 +36,7 @@ var checkCmd = &cobra.Command{
 	Short: "check a package",
 	Long: `
 	pkc check <pkg tarball> 
+	pkc check . // check all tarballs in current directory
 	pkc check <pkg dir> --threads=4 //check on 4 threads
 	pkc check <pkg tarball> --libpaths=<somedir(s)>
  `,
@@ -61,14 +64,13 @@ func run(cmd *cobra.Command, args []string) error {
 	log.Level = logrus.DebugLevel
 
 	fs := afero.NewOsFs()
-	cs := rcmd.CheckSettings{
-		TarPath:   "/Users/devin/Repos/PKPDmisc_2.1.1.tar.gz",
-		OutputDir: "test",
+	csTemplate := rcmd.CheckSettings{
+		OutputDir: viper.GetString("output"),
 		Vanilla:   true,
 		Cran:      false,
 	}
 
-	libPaths := strings.Split(viper.GetString("libPaths"), ":")
+	libPaths := strings.Split(viper.GetString("libpaths"), ":")
 	ok, err := validateLibPaths(fs, libPaths)
 	if err != nil || !ok {
 		log.Fatalf("error checking libPaths: %s", err)
@@ -76,8 +78,61 @@ func run(cmd *cobra.Command, args []string) error {
 
 	rs := rcmd.RSettings{
 		LibPaths: libPaths,
+		Rpath:    viper.GetString("rpath"),
 	}
-	rcmd.Check(fs, cs, rs, log, true)
+	var wg sync.WaitGroup
+	queue := make(chan struct{}, viper.GetInt("threads"))
+	start := time.Now()
+
+	log.Debugf("setting up a work queue with %v workers", viper.GetInt("threads"))
+
+	defer close(queue)
+
+	for _, arg := range args {
+
+		// check if arg is a file or Dir
+		// dirty check for if doesn't have an extension is a folder
+		_, ext := goutils.FileAndExt(arg)
+		if ext == "" || arg == "." {
+			// could be directory, will need to be careful about the waitgroup as don't want to
+			// keep waiting forever since it
+			isDir, err := goutils.IsDir(fs, arg)
+			if err != nil || !isDir {
+				log.Printf("issue handling %s, if this is a run please add the extension. Err: (%s)", arg, err)
+				continue
+			}
+			dirInfo, _ := afero.ReadDir(fs, arg)
+
+			tarsInDir := goutils.ListFilesByExt(goutils.ListFiles(dirInfo), "tar.gz")
+			// TODO: add black/white list of tars to check against
+
+			if err != nil {
+				log.Printf("issue getting models in dir %s, if this is a run please add the extension. Err: (%s)", arg, err)
+				continue
+			}
+			log.Debugf("adding %v model files in directory %s to queue", len(tarsInDir), arg)
+
+			wg.Add(len(tarsInDir))
+			for _, tar := range tarsInDir {
+				log.Infof("adding tarball %s to queue\n", tar)
+				cs := csTemplate
+				cs.TarPath = tar
+				go runCheck(fs, queue, &wg, cs, rs, log, viper.GetBool("preview"))
+			}
+
+		} else {
+			// figure out if need to do expansion, or run as-is
+			log.Infof("adding tarball %s to queue\n", arg)
+			wg.Add(1)
+			cs := csTemplate
+			cs.TarPath = arg
+			go runCheck(fs, queue, &wg, cs, rs, log, viper.GetBool("preview"))
+		}
+	}
+
+	wg.Wait()
+	elapsed := time.Since(start)
+	log.Printf("running on %v threads took %s", viper.GetInt("threads"), elapsed)
 	return nil
 }
 
