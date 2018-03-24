@@ -117,3 +117,28 @@ func validateLibPaths(fs afero.Fs, libPaths []string) (bool, error) {
 
 	return true, nil
 }
+
+func runCheck(
+	fs afero.Fs,
+	queue chan struct{},
+	wg *sync.WaitGroup,
+	cs rcmd.CheckSettings,
+	rs rcmd.RSettings,
+	log *logrus.Logger,
+	preview bool,
+) error {
+	queue <- struct{}{}
+	log.Infof("running check for package: %s", cs.Package().Name)
+	defer func() {
+		wg.Done()
+		<-queue
+	}()
+	err := rcmd.Check(fs, cs, rs, log, preview)
+
+	if err != nil {
+		log.Warnf("failed check for package: %s", cs.Package().Name)
+		return err
+	}
+	log.Infof("completed check for package: %s", cs.Package().Name)
+	return nil
+}
