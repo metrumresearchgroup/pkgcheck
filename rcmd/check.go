@@ -13,8 +13,6 @@ import (
 )
 
 // Check runs RCmdCheck
-// fs filesystem abstraction
-// libDir library directory
 func Check(
 	fs afero.Fs,
 	cs CheckSettings,
@@ -30,6 +28,18 @@ func Check(
 	if !ok {
 		lg.Errorf("no tarball specified at %s", cs.TarPath)
 		return fmt.Errorf("no tarball at %s", cs.TarPath)
+	}
+
+	if cs.OutputDir != "" {
+		ok, err = goutils.DirExists(fs, cs.OutputDir)
+		if err != nil {
+			lg.Errorf("error in checking for TarPath at: %s", cs.TarPath)
+			return err
+		}
+		if !ok {
+			lg.Errorf("no output directory detected at %s", cs.OutputDir)
+			return fmt.Errorf("no output directory at %s", cs.TarPath)
+		}
 	}
 	cmdArgs := []string{
 		"CMD",
@@ -53,6 +63,11 @@ func Check(
 			"env":           rLibsSite,
 		}).Debug(cmdArgs)
 
+	// --vanilla is a command for R and should be specified before the CMD, eg
+	// R --vanilla CMD check
+	if cs.Vanilla {
+		cmdArgs = append([]string{"--vanilla"}, cmdArgs...)
+	}
 	cmd := exec.Command(
 		rs.R(),
 		cmdArgs...,
@@ -74,9 +89,10 @@ func Check(
 	}
 	scanner := bufio.NewScanner(cmdReader)
 	errScanner := bufio.NewScanner(errReader)
-	outputFile, err := os.Create(filepath.Join(cs.OutputDir, fmt.Sprintf("%s_stdout.out", cs.Package().Name)))
+	outputFileName := filepath.Join(cs.OutputDir, fmt.Sprintf("%s_stdout.out", cs.Package().Name))
+	outputFile, err := os.Create(outputFileName)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "could not make stdout file to pipe output to")
+		fmt.Fprintf(os.Stderr, "could not make stdout file to pipe output to %s \n", outputFileName)
 	} else {
 		defer outputFile.Close()
 	}
