@@ -15,32 +15,27 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"strings"
 
-	"github.com/spf13/cobra"
+	"github.com/dpastoor/goutils"
+
+	"github.com/spf13/afero"
 	"github.com/spf13/viper"
+
+	"github.com/dpastoor/pkgcheck/rcmd"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
 )
 
-var (
-	cacheDir     string
-	cacheExe     string
-	saveExe      string
-	cleanLvl     int
-	copyLvl      int
-	gitignoreLvl int
-	git          bool
-	oneEst       bool
-	runDir       string
-)
-
-// runCmd represents the run command
+// checkCmd represents the R CMD check command
 var checkCmd = &cobra.Command{
 	Use:   "check",
 	Short: "check a package",
 	Long: `
 	pkc check <pkg tarball> 
 	pkc check <pkg dir> --threads=4 //check on 4 threads
-	pkc check <pkg tarball> --libDir="<somedir>"
+	pkc check <pkg tarball> --libpaths=<somedir(s)>
  `,
 	RunE: run,
 }
@@ -56,8 +51,33 @@ func run(cmd *cobra.Command, args []string) error {
 	// defer f.Close()
 
 	// log.SetOutput(f)
-	log.Printf("lib dir at: %s", viper.GetString("libDir"))
-	log.Printf("running on %v threads", viper.GetInt("threads"))
+
+	// Log as JSON instead of the default ASCII formatter.
+	log := logrus.New()
+	// Output to stdout instead of the default stderr
+	// Can be any io.Writer, see below for File example
+
+	// Only log the warning severity or above.
+	log.Level = logrus.DebugLevel
+
+	fs := afero.NewOsFs()
+	cs := rcmd.CheckSettings{
+		TarPath:   "/Users/devin/Repos/PKPDmisc_2.1.1.tar.gz",
+		OutputDir: "test",
+		Vanilla:   true,
+		Cran:      false,
+	}
+
+	libPaths := strings.Split(viper.GetString("libPaths"), ":")
+	ok, err := validateLibPaths(fs, libPaths)
+	if err != nil || !ok {
+		log.Fatalf("error checking libPaths: %s", err)
+	}
+
+	rs := rcmd.RSettings{
+		LibPaths: libPaths,
+	}
+	rcmd.Check(fs, cs, rs, log, true)
 	return nil
 }
 
@@ -74,4 +94,26 @@ func init() {
 	// is called directly, e.g.:
 	// runCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
+}
+
+// validateLibPaths validates all libPaths exist
+func validateLibPaths(fs afero.Fs, libPaths []string) (bool, error) {
+	if len(libPaths) == 1 {
+		// could be either "" or a single libPath
+		if libPaths[0] != "" {
+			ok, err := goutils.DirExists(fs, libPaths[0])
+			if !ok || err != nil {
+				return false, fmt.Errorf("libPath does not exist at: %s, err: %s", libPaths[0], err)
+			}
+		}
+	} else {
+		for _, lp := range libPaths {
+			ok, err := goutils.DirExists(fs, lp)
+			if !ok || err != nil {
+				return false, fmt.Errorf("libPath does not exist at: %s, err: %s", libPaths[0], err)
+			}
+		}
+	}
+
+	return true, nil
 }

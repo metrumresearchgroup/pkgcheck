@@ -55,9 +55,10 @@ func LoadConfigFromPath(configFilename string) error {
 
 func loadDefaultSettings() {
 	// the lib paths to use, colon separated list of paths
-	viper.SetDefault("libPaths", "")
+	viper.SetDefault("libpaths", "")
+	viper.SetDefault("debug", false)
 	// should be one of Debug,Info,Warn,Error,Fatal,Panic
-	viper.SetDefault("logLevel", "Warn")
+	viper.SetDefault("loglevel", "warn")
 	// path to R on system, defaults to R in path
 	viper.SetDefault("rpath", "R")
 	viper.SetDefault("output", "pkcresults")
