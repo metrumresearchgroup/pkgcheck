@@ -17,6 +17,9 @@ func (rs RSettings) R() string {
 
 // LibPathsEnv returns the libpaths formatted in the style to be set as an environment variable
 func (rs RSettings) LibPathsEnv() (bool, string) {
+	if len(rs.LibPaths) == 0 {
+		return false, ""
+	}
 	if len(rs.LibPaths) == 1 && rs.LibPaths[0] == "" {
 		return false, ""
 	}

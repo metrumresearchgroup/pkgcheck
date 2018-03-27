@@ -19,10 +19,16 @@ func TestLibPathsEnv(t *testing.T) {
 			},
 			"R_LIBS_SITE=path/to/folder1/:path/to/folder2/",
 		},
+		{
+			RSettings{
+				LibPaths: []string{},
+			},
+			"",
+		},
 	}
 	for _, tt := range libPathTests {
 		ok, actual := tt.in.LibPathsEnv()
-		if !ok {
+		if actual != "" && !ok {
 			t.Errorf("LibPaths present, should be ok")
 		}
 		if actual != tt.expected {
