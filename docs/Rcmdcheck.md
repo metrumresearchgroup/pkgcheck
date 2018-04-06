@@ -197,3 +197,15 @@ The following options apply where sub-architectures are in use:
 
 By default, all test sections are turned on.
 ```
+
+
+## development version of R
+
+per: https://twitter.com/henrikbengtsson/status/982102597178814464
+
+To reproduce #rstats-devel CRAN errors, add below to .travis.yml file:
+
+env:
+- R_KEEP_PKG_SOURCE=yes
+- _R_S3_METHOD_LOOKUP_BASEENV_AFTER_GLOBALENV_=true
+- _R_S3_METHOD_LOOKUP_USE_TOPENV_AS_DEFENV_=true
