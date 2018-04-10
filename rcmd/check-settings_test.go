@@ -62,3 +62,34 @@ func TestPackage(t *testing.T) {
 		}
 	}
 }
+
+func TestFilterList(t *testing.T) {
+	filterList := make(map[string]bool)
+	filterList["dplyr"] = true
+	var packages = []struct {
+		CheckSettings CheckSettings
+		FilterList    map[string]bool
+		expected      bool
+	}{
+		{
+			CheckSettings: CheckSettings{
+				TarPath: "dplyr_0.7.4.tar.gz",
+			},
+			FilterList: filterList,
+			expected:   true,
+		},
+		{
+			CheckSettings: CheckSettings{
+				TarPath: "dpr_0.7.4.tar.gz",
+			},
+			FilterList: filterList,
+			expected:   false,
+		},
+	}
+	for _, tt := range packages {
+		actual := InFilterList(tt.CheckSettings, tt.FilterList)
+		if actual != tt.expected {
+			t.Errorf("GOT: %v, WANT: %v", actual, tt.expected)
+		}
+	}
+}

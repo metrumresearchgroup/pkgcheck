@@ -40,3 +40,10 @@ func (cs CheckSettings) Package() Package {
 		Version: packageVersion[1],
 	}
 }
+
+// InFilterList checks if a package is in a given whitelist or blacklist
+func InFilterList(cs CheckSettings, fl map[string]bool) bool {
+	pkgName := cs.Package().Name
+	_, ok := fl[pkgName]
+	return ok
+}
