@@ -4,22 +4,22 @@ import (
 	"testing"
 )
 
-var cstests = []struct {
-	in       CheckSettings
-	expected []string
-}{
-	{
-		CheckSettings{
-			TarPath: "path/to/dplyr_0.7.4.tar.gz",
-		},
-		[]string{
-			"--no-manual",
-			"--no-build-vignettes",
-		},
-	},
-}
-
 func TestCmdFlags(t *testing.T) {
+
+	var cstests = []struct {
+		in       CheckSettings
+		expected []string
+	}{
+		{
+			CheckSettings{
+				TarPath: "path/to/dplyr_0.7.4.tar.gz",
+			},
+			[]string{
+				"--no-manual",
+				"--no-build-vignettes",
+			},
+		},
+	}
 	for _, tt := range cstests {
 		for i, actual := range tt.in.CmdFlags() {
 
@@ -36,6 +36,15 @@ func TestPackage(t *testing.T) {
 		in       CheckSettings
 		expected Package
 	}{
+		{
+			CheckSettings{
+				TarPath: "dplyr_0.7.4.tar.gz",
+			},
+			Package{
+				Name:    "dplyr",
+				Version: "0.7.4",
+			},
+		},
 		{
 			CheckSettings{
 				TarPath: "path/to/dplyr_0.7.4.tar.gz",
