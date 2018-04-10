@@ -11,12 +11,21 @@ To address this, a flexible system to run similar checks to those CRAN provides,
 scrutiny of the checks will be important to confidently construct package cohorts. Likewise, to support environments with
 rigorous change control processes and/or continuous integration activities, minimizing runtime dependencies is valuable.
 
+## Dependency Checks
+
+## Reverse Dependency Checks
+
+Overall, revdepcheck's are generally done by a package maintainer in preparation to submit to CRAN.
+As CRAN requires the most recent set of packages to be compatible, to update a given package (Package A), all packages that depend
+on package A must still pass the `R CMD CHECK` with the new version. Hence, it becomes an upgrade cycle of fixing/updating all 
+reverse packages before the new package can also be added. 
+
 ## Prior/ongoing efforts
 
-R CMD check execution
-
-* `devtools::check()`
-* `rcmdcheck` package
+* `devtools::check()` - in development package
+* `rcmdcheck` package - package dependencies
+* `revdepcheck` package - package reverse dependencies
+* `prrd` package - package reverse dependencies
 
 ## Differences
 
@@ -35,7 +44,16 @@ For example, pointing to a old remote version of callr 1 major version behind.
 rcmdcheck could potentially be 'adopted' by amgen or others willing to take on maintanence, 
 however still brings up the issue of minimizing runtime dependencies, as well as implementing features around
 parallel checks and needs specific to amgen (eg passing all requirements to submit to CRAN is not a problem). 
+This option is seen as "moderate risk", as without significant communication with the Rstudio team developing the packages.
+To our knowledge no external influences (eg corporate funding to prioritize certain features)
+ have been shown to handle the development cycles of the packages. For example, a 
+priority bug fix or refactor required by Amgen could be implemented, but sit as a pull request for an indeterminate
+length of time, and even then no guarantees on acceptance can be made.
 
+`revdepcheck` has the same risks associated with rcmdcheck. The focus is on the existing infrastructure and setup of the community
+around CRAN. Feature such as sending emails to maintainers with issues, though highly relevant for package maintainers, are
+not structured in a way to migrate cohorts of packages or provide the audit summaries that may be required to support
+maintaining an internal subset of CRAN. 
 
 ## Dependency analysis
 
@@ -51,7 +69,7 @@ This may change to expose and use some of the parsing or processing capabilities
 as these packages mature they may be leveraged as a component of the parallelization infrastructure if value-add can be demonstrated.
 
 The following dependency tree was constructed representing the dependency tree based on utilizing the following packages
-from `r-lib` organization
+from `r-lib` organization as of March 2018:
 
 * r-lib/pkgdepends 
 * r-lib/rcmdcheck
@@ -2883,3 +2901,8 @@ revdepcheck (1.0.0.9000)
   ├─rlang (0.2.0.9000)
   └─withr (2.1.2)
 ```
+
+The number of packages in itself cannot dictate risk, as a set of small well-scoped packages can be more easily maintained 
+in many scenarios, than a single monolithic package. That said, many packages are explicitly noted 
+to be experimental. ![experimentaltag](assets/experimental_tag.png) 
+
