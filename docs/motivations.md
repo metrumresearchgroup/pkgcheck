@@ -32,16 +32,16 @@ reverse packages before the new package can also be added.
 `devtools::check()` is built around checking an in-development package in a particular folder on a developers computer.
 This tooling is expected to check package cohorts provided in a runtime or in a project folder, hence is different in scope.
 
-The rcmdcheck package is designed around providing optimal feedback for a developer working on their specific package.
+The `rcmdcheck` package is designed around providing optimal feedback for a developer working on their specific package.
 The package has not had much development activity, and still has low (~37%) test coverage in comparison to most of the
 r-lib organization packages (generally > 80%). Feature-wise, the core features do align with the objectives of
 checking a specific package, however no functionality towards checking multiple packages in a cohort is provided.
 Likewise, new feature development is not prioritized; for example, https://github.com/r-lib/rcmdcheck/issues/12,
 discussed in 2016, shows that features that are important to managing scenarios other than submission to CRAN,
 have not had progress. Most importantly, `rcmdcheck` is not actively following the ongoing development progress within r-lib.
-For example, pointing to a old remote version of callr 1 major version behind.
+For example, pointing to a old remote version of `callr` 1 major version behind.
 
-rcmdcheck could potentially be 'adopted' by amgen or others willing to take on maintainence,
+`rcmdcheck` could potentially be 'adopted' by amgen or others willing to take on maintainence,
 however still brings up the issue of minimizing runtime dependencies, as well as implementing features around
 parallel checks and needs specific to amgen (eg passing all requirements to submit to CRAN is not a problem).
 This option is seen as "moderate risk", as without significant communication with the Rstudio team developing the packages.
