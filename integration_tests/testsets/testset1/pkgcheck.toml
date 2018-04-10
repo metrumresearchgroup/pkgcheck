@@ -1,4 +1,4 @@
-output= "output"
+output = "output"
 debug = true
 threads = 2
 
