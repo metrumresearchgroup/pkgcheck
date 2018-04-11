@@ -1,0 +1,5 @@
+output = "output"
+threads = 2
+whitelist = [
+    "test1"
+]
