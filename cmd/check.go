@@ -142,11 +142,11 @@ func rCheck(cmd *cobra.Command, args []string) error {
 			ok := rcmd.ShouldCheck(cs, filterListMap)
 			// first ID if going to run check before adding to waitgroup
 			if ok {
-				log.Debugf("adding tarball %s to queue\n", tar)
+				log.Debugf("adding tarball %s to queue\n", arg)
 				wg.Add(1)
 				go runCheck(fs, queue, &wg, cs, rs, log, viper.GetBool("preview"))
 			} else {
-				log.Debugf("skipping tarball %s \n", tar)
+				log.Debugf("skipping tarball %s \n", arg)
 			}
 		}
 	}
