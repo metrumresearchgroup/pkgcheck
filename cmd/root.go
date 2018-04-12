@@ -52,15 +52,21 @@ func init() {
 	// Cobra supports Persistent Flags, which, if defined here,
 	// will be global for your application.
 	RootCmd.PersistentFlags().String("config", "", "config file (default is $HOME/pkgcheck.toml)")
+	RootCmd.PersistentFlags().String("loglevel", "", "level for logging")
 	RootCmd.PersistentFlags().String("libpaths", "", "library paths, colon separated list")
 	RootCmd.PersistentFlags().Int("threads", 0, "number of threads to execute with")
 	RootCmd.PersistentFlags().Bool("preview", false, "preview action, but don't actually run command")
 	RootCmd.PersistentFlags().Bool("debug", false, "use debug mode")
+	RootCmd.PersistentFlags().StringSlice("whitelist", []string{}, "package whitelist")
+	RootCmd.PersistentFlags().StringSlice("blacklist", []string{}, "package blacklist")
 	viper.BindPFlag("config", RootCmd.PersistentFlags().Lookup("config"))
+	viper.BindPFlag("loglevel", RootCmd.PersistentFlags().Lookup("loglevel"))
 	viper.BindPFlag("libpaths", RootCmd.PersistentFlags().Lookup("libpaths"))
 	viper.BindPFlag("threads", RootCmd.PersistentFlags().Lookup("threads"))
 	viper.BindPFlag("preview", RootCmd.PersistentFlags().Lookup("preview"))
 	viper.BindPFlag("debug", RootCmd.PersistentFlags().Lookup("debug"))
+	viper.BindPFlag("whitelist", RootCmd.PersistentFlags().Lookup("whitelist"))
+	viper.BindPFlag("blacklist", RootCmd.PersistentFlags().Lookup("blacklist"))
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 }
