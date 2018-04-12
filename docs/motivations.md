@@ -53,7 +53,13 @@ length of time, and even then no guarantees on acceptance can be made.
 `revdepcheck` has the same risks associated with rcmdcheck. The focus is on the existing infrastructure and setup of the community
 around CRAN. Feature such as sending emails to maintainers with issues, though highly relevant for package maintainers, are
 not structured in a way to migrate cohorts of packages or provide the audit summaries that may be required to support
-maintaining an internal subset of CRAN.
+maintaining an internal subset of CRAN. On the other hand, revdepcheck will have
+a much different execution environment than that of the depcheck, and should be run less
+frequently. That is to say, only admins managing minicran or package developers should
+need to handle reverse dependency examinations.
+Hence, consideration for the initial rollout could use revdepcheck,
+however should be tracked against `prdd` and using the `pkc` tool itself once the dependency check
+portion is implemented.
 
 ## Dependency analysis
 
