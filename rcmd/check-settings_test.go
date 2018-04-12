@@ -68,26 +68,42 @@ func TestFilterList(t *testing.T) {
 	filterList["dplyr"] = true
 	var packages = []struct {
 		CheckSettings CheckSettings
-		FilterList    map[string]bool
+		FilterList    FilterMap
 		expected      bool
 	}{
 		{
 			CheckSettings: CheckSettings{
 				TarPath: "dplyr_0.7.4.tar.gz",
 			},
-			FilterList: filterList,
-			expected:   true,
+			FilterList: FilterMap{
+				Type: "whitelist",
+				Map:  filterList,
+			},
+			expected: true,
 		},
 		{
 			CheckSettings: CheckSettings{
 				TarPath: "dpr_0.7.4.tar.gz",
 			},
-			FilterList: filterList,
-			expected:   false,
+			FilterList: FilterMap{
+				Type: "whitelist",
+				Map:  filterList,
+			},
+			expected: false,
+		},
+		{
+			CheckSettings: CheckSettings{
+				TarPath: "dplyr_0.7.4.tar.gz",
+			},
+			FilterList: FilterMap{
+				Type: "blacklist",
+				Map:  filterList,
+			},
+			expected: false,
 		},
 	}
 	for _, tt := range packages {
-		actual := InFilterList(tt.CheckSettings, tt.FilterList)
+		actual := ShouldCheck(tt.CheckSettings, tt.FilterList)
 		if actual != tt.expected {
 			t.Errorf("GOT: %v, WANT: %v", actual, tt.expected)
 		}

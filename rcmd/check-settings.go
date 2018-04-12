@@ -41,9 +41,13 @@ func (cs CheckSettings) Package() Package {
 	}
 }
 
-// InFilterList checks if a package is in a given whitelist or blacklist
-func InFilterList(cs CheckSettings, fl map[string]bool) bool {
+// ShouldCheck returns whether a package should be checked given the filterlist type
+func ShouldCheck(cs CheckSettings, fm FilterMap) bool {
 	pkgName := cs.Package().Name
-	_, ok := fl[pkgName]
-	return ok
+	_, ok := fm.Map[pkgName]
+	if fm.Type == "whitelist" {
+		return ok
+	}
+	// if blacklist should not be checked if present
+	return !ok
 }
