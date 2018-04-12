@@ -20,3 +20,9 @@ type CheckSettings struct {
 	Vanilla   bool   `json:"vanilla,omitempty"`
 	Cran      bool   `json:"cran,omitempty"`
 }
+
+// FilterMap is a filtermap with type whitelist or blacklist
+type FilterMap struct {
+	Type string
+	Map  map[string]bool
+}
