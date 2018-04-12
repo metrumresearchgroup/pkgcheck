@@ -27,7 +27,7 @@ import (
 )
 
 // VERSION is the current pkc version
-const VERSION string = "0.0.1"
+const VERSION string = "0.0.2"
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
