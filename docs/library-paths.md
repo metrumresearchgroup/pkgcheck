@@ -12,8 +12,9 @@ Usage
 .Library.site
 Arguments
 
-new	
-a character vector with the locations of R library trees. Tilde expansion (path.expand) is done, and if any element contains one of *?[, globbing is done where supported by the platform: see Sys.glob.
+new a character vector with the locations of R library trees. Tilde expansion (path.expand) is done, 
+and if any element contains one of *?[, globbing is done where supported by the platform: see Sys.glob.
+
 Details
 
 .Library is a character string giving the location of the default library, the ‘library’ subdirectory of R_HOME.

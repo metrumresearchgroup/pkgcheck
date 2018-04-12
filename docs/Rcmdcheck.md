@@ -199,6 +199,13 @@ By default, all test sections are turned on.
 ```
 
 
+Note: R CMD check and R CMD build run R processes with --vanilla in which none of the user’s startup files are read. 
+If you need R_LIBS set (to find packages in a non-standard library) you can set it in the environment: 
+also you can use the check and build environment files (as specified by the environment variables 
+R_CHECK_ENVIRON and R_BUILD_ENVIRON; if unset, files ~/.R/check.Renviron and ~/.R/build.Renviron are used) 
+to set environment variables when using these utilities.
+
+
 ## development version of R
 
 per: https://twitter.com/henrikbengtsson/status/982102597178814464
