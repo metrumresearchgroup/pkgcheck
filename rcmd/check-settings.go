@@ -40,3 +40,14 @@ func (cs CheckSettings) Package() Package {
 		Version: packageVersion[1],
 	}
 }
+
+// ShouldCheck returns whether a package should be checked given the filterlist type
+func ShouldCheck(cs CheckSettings, fm FilterMap) bool {
+	pkgName := cs.Package().Name
+	_, ok := fm.Map[pkgName]
+	if fm.Type == "whitelist" {
+		return ok
+	}
+	// if blacklist should not be checked if present
+	return !ok
+}

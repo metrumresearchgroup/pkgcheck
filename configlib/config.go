@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// LoadGlobalConfig loads nonmemutils configuration into the global Viper
+// LoadGlobalConfig loads pkgcheck configuration into the global Viper
 func LoadGlobalConfig(configFilename string) error {
 	viper.SetConfigName(configFilename)
 	viper.SetConfigType("toml")
@@ -61,7 +61,7 @@ func loadDefaultSettings() {
 	viper.SetDefault("loglevel", "warn")
 	// path to R on system, defaults to R in path
 	viper.SetDefault("rpath", "R")
-	viper.SetDefault("output", "pkcresults")
+	viper.SetDefault("output", "output")
 	viper.SetDefault("threads", runtime.NumCPU())
 
 }

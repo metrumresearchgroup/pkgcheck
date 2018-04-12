@@ -1,0 +1,4 @@
+output="testoutput"
+debug = true
+threads=2
+

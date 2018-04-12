@@ -40,28 +40,35 @@ var checkCmd = &cobra.Command{
 	pkc check <pkg dir> --threads=4 //check on 4 threads
 	pkc check <pkg tarball> --libpaths=<somedir(s)>
  `,
-	RunE: run,
+	RunE: rCheck,
 }
 
-func run(cmd *cobra.Command, args []string) error {
-
-	//AppFs := afero.NewOsFs()
-	// can use this to redirect log output
-	// f, err := os.OpenFile("testlogfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	// if err != nil {
-	// 	log.Fatalf("error opening file: %v", err)
-	// }
-	// defer f.Close()
-
+func rCheck(cmd *cobra.Command, args []string) error {
 	// log.SetOutput(f)
 
-	// Log as JSON instead of the default ASCII formatter.
 	log := logrus.New()
-	// Output to stdout instead of the default stderr
-	// Can be any io.Writer, see below for File example
 
-	// Only log the warning severity or above.
-	log.Level = logrus.DebugLevel
+	switch logLevel := viper.GetString("loglevel"); logLevel {
+	case "debug":
+		log.Level = logrus.DebugLevel
+	case "info":
+		log.Level = logrus.InfoLevel
+	case "warn":
+		log.Level = logrus.WarnLevel
+	case "error":
+		log.Level = logrus.ErrorLevel
+	case "fatal":
+		log.Level = logrus.FatalLevel
+	case "panic":
+		log.Level = logrus.PanicLevel
+	default:
+		log.Level = logrus.WarnLevel
+	}
+
+	filterListMap := rcmd.CreateFilterMap(
+		viper.GetStringSlice("whitelist"),
+		viper.GetStringSlice("blacklist"),
+	)
 
 	fs := afero.NewOsFs()
 	csTemplate := rcmd.CheckSettings{
@@ -80,6 +87,7 @@ func run(cmd *cobra.Command, args []string) error {
 		LibPaths: libPaths,
 		Rpath:    viper.GetString("rpath"),
 	}
+
 	var wg sync.WaitGroup
 	queue := make(chan struct{}, viper.GetInt("threads"))
 	start := time.Now()
@@ -88,6 +96,7 @@ func run(cmd *cobra.Command, args []string) error {
 
 	defer close(queue)
 
+	// setup filter list
 	for _, arg := range args {
 
 		// check if arg is a file or Dir
@@ -110,23 +119,35 @@ func run(cmd *cobra.Command, args []string) error {
 				log.Printf("issue getting models in dir %s, if this is a run please add the extension. Err: (%s)", arg, err)
 				continue
 			}
-			log.Debugf("adding %v model files in directory %s to queue", len(tarsInDir), arg)
+			log.Debugf("adding %v model files in directory %s considered", len(tarsInDir), arg)
 
-			wg.Add(len(tarsInDir))
 			for _, tar := range tarsInDir {
-				log.Infof("adding tarball %s to queue\n", tar)
 				cs := csTemplate
 				cs.TarPath = tar
-				go runCheck(fs, queue, &wg, cs, rs, log, viper.GetBool("preview"))
+				ok := rcmd.ShouldCheck(cs, filterListMap)
+				// first ID if going to run check before adding to waitgroup
+				if ok {
+					log.Debugf("adding tarball %s to queue\n", tar)
+					wg.Add(1)
+					go runCheck(fs, queue, &wg, cs, rs, log, viper.GetBool("preview"))
+				} else {
+					log.Debugf("skipping tarball %s \n", tar)
+				}
 			}
 
 		} else {
 			// figure out if need to do expansion, or run as-is
-			log.Infof("adding tarball %s to queue\n", arg)
-			wg.Add(1)
 			cs := csTemplate
 			cs.TarPath = arg
-			go runCheck(fs, queue, &wg, cs, rs, log, viper.GetBool("preview"))
+			ok := rcmd.ShouldCheck(cs, filterListMap)
+			// first ID if going to run check before adding to waitgroup
+			if ok {
+				log.Debugf("adding tarball %s to queue\n", arg)
+				wg.Add(1)
+				go runCheck(fs, queue, &wg, cs, rs, log, viper.GetBool("preview"))
+			} else {
+				log.Debugf("skipping tarball %s \n", arg)
+			}
 		}
 	}
 

@@ -4,22 +4,22 @@ import (
 	"testing"
 )
 
-var cstests = []struct {
-	in       CheckSettings
-	expected []string
-}{
-	{
-		CheckSettings{
-			TarPath: "path/to/dplyr_0.7.4.tar.gz",
-		},
-		[]string{
-			"--no-manual",
-			"--no-build-vignettes",
-		},
-	},
-}
-
 func TestCmdFlags(t *testing.T) {
+
+	var cstests = []struct {
+		in       CheckSettings
+		expected []string
+	}{
+		{
+			CheckSettings{
+				TarPath: "path/to/dplyr_0.7.4.tar.gz",
+			},
+			[]string{
+				"--no-manual",
+				"--no-build-vignettes",
+			},
+		},
+	}
 	for _, tt := range cstests {
 		for i, actual := range tt.in.CmdFlags() {
 
@@ -38,6 +38,15 @@ func TestPackage(t *testing.T) {
 	}{
 		{
 			CheckSettings{
+				TarPath: "dplyr_0.7.4.tar.gz",
+			},
+			Package{
+				Name:    "dplyr",
+				Version: "0.7.4",
+			},
+		},
+		{
+			CheckSettings{
 				TarPath: "path/to/dplyr_0.7.4.tar.gz",
 			},
 			Package{
@@ -50,6 +59,53 @@ func TestPackage(t *testing.T) {
 		actual := tt.in.Package()
 		if actual != tt.expected {
 			t.Errorf("GOT: %s, WANT: %s", actual, tt.expected)
+		}
+	}
+}
+
+func TestFilterList(t *testing.T) {
+	filterList := make(map[string]bool)
+	filterList["dplyr"] = true
+	var packages = []struct {
+		CheckSettings CheckSettings
+		FilterList    FilterMap
+		expected      bool
+	}{
+		{
+			CheckSettings: CheckSettings{
+				TarPath: "dplyr_0.7.4.tar.gz",
+			},
+			FilterList: FilterMap{
+				Type: "whitelist",
+				Map:  filterList,
+			},
+			expected: true,
+		},
+		{
+			CheckSettings: CheckSettings{
+				TarPath: "dpr_0.7.4.tar.gz",
+			},
+			FilterList: FilterMap{
+				Type: "whitelist",
+				Map:  filterList,
+			},
+			expected: false,
+		},
+		{
+			CheckSettings: CheckSettings{
+				TarPath: "dplyr_0.7.4.tar.gz",
+			},
+			FilterList: FilterMap{
+				Type: "blacklist",
+				Map:  filterList,
+			},
+			expected: false,
+		},
+	}
+	for _, tt := range packages {
+		actual := ShouldCheck(tt.CheckSettings, tt.FilterList)
+		if actual != tt.expected {
+			t.Errorf("GOT: %v, WANT: %v", actual, tt.expected)
 		}
 	}
 }
