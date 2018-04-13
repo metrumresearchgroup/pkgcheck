@@ -61,11 +61,11 @@ Hence, consideration for the initial rollout could use revdepcheck,
 however should be tracked against `prdd` and using the `pkc` tool itself once the dependency check
 portion is implemented.
 
-`prdd` is another strong consideration for revdepchecks. It also follows the preference of 
+`prrd` is another strong consideration for revdepchecks. It also follows the preference of 
 simplicity and minimizing dependencies. 
 It is supported by Dirk Eddelbuettel. https://github.com/eddelbuettel/prrd The design
 is such that it could be wrapped by the `pkc` package to manage the parallelization 
-primitives, while allowing the prrd package to execute the revdep process.
+primitives, while allowing the `prrd` package to execute the `revdep` process.
 
 ## Dependency analysis
 
