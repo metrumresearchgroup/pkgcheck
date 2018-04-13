@@ -1,0 +1,6 @@
+tarball_location = "../tarballs"
+tarballs = [
+   "testnote_0.0.1.tar.gz",
+   "testwarning_0.0.1.tar.gz",
+   "testerror_0.0.1.tar.gz"
+]
