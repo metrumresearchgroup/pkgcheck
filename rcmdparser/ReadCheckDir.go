@@ -49,11 +49,11 @@ func ReadCheckDir(fs afero.Fs, cd string) (CheckOutput, error) {
 		testthatFileFailPath := filepath.Join(cd, "tests", "testthat.Rout.fail")
 
 		if exists(fs, testthatFilePath) {
-			testFile, _ := afero.ReadFile(fs, checkFilePath)
+			testFile, _ := afero.ReadFile(fs, testthatFilePath)
 			test.Testthat = true
 			test.Results = testFile
 		} else if exists(fs, testthatFileFailPath) {
-			testFile, _ := afero.ReadFile(fs, checkFilePath)
+			testFile, _ := afero.ReadFile(fs, testthatFileFailPath)
 			test.Testthat = true
 			test.Results = testFile
 		}
