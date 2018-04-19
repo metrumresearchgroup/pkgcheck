@@ -1,5 +1,3 @@
 output = "output"
-threads = 2
-whitelist = [
-    "test1"
-]
+threads = 5
+loglevel = "debug"
