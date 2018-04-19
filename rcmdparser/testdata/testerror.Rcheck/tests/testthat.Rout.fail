@@ -1,0 +1,32 @@
+
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.4.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> library(testerror)
+> 
+> test_check("testerror")
+── 1. Failure: median shows up as failure (@test-median.R#11)  ─────────────────
+my_median(vals) not equal to 0.
+1/1 mismatches
+[1] 4 - 0 == 4
+
+══ testthat results  ═══════════════════════════════════════════════════════════
+OK: 1 SKIPPED: 0 FAILED: 1
+1. Failure: median shows up as failure (@test-median.R#11) 
+
+Error: testthat unit tests failed
+Execution halted
