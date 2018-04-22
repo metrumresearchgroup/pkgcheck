@@ -21,6 +21,12 @@ func TestReadCheckDir(t *testing.T) {
 	goutils.WriteLinesFS(testFS, []string{"log"}, "WithTestThat/00check.log")
 	goutils.WriteLinesFS(testFS, []string{"install"}, "WithTestThat/00install.out")
 	goutils.WriteLinesFS(testFS, []string{"tests"}, "WithTestThat/tests/testthat.Rout")
+
+	// Failed Testthat
+	testFS.MkdirAll("FailedTest/tests", 0755)
+	goutils.WriteLinesFS(testFS, []string{"log"}, "FailedTest/00check.log")
+	goutils.WriteLinesFS(testFS, []string{"install"}, "FailedTest/00install.out")
+	goutils.WriteLinesFS(testFS, []string{"failed-tests"}, "FailedTest/tests/testthat.Rout.fail")
 	var cdtests = []struct {
 		in       string
 		expected CheckOutput
@@ -37,6 +43,14 @@ func TestReadCheckDir(t *testing.T) {
 			"WithTestThat",
 			CheckOutput{
 				TestOutput{true, true, []byte("tests\n")},
+				[]byte("log\n"),
+				[]byte("install\n"),
+			},
+		},
+		{
+			"FailedTest",
+			CheckOutput{
+				TestOutput{true, true, []byte("failed-tests\n")},
 				[]byte("log\n"),
 				[]byte("install\n"),
 			},
