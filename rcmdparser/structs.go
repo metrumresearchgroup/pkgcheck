@@ -23,10 +23,15 @@ type TestResults struct {
 	Available bool
 }
 
-// LogResults is a struct of the R CMD check results
-type LogResults struct {
+// CheckResults are the parsed results from the check log
+type CheckResults struct {
 	Errors   []string
 	Warnings []string
 	Notes    []string
-	Tests    TestResults
+}
+
+// LogResults is a struct of the R CMD check results
+type LogResults struct {
+	Checks CheckResults
+	Tests  TestResults
 }
