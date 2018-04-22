@@ -10,6 +10,12 @@ import (
 func main() {
 	appFS := afero.NewOsFs()
 
-	checkDir := "../../rcmdparser/testdata/testerror.Rcheck"
-	fmt.Println(rcmdparser.ReadCheckDir(appFS, checkDir))
+	checkDir := "../../rcmdparser/testdata/testwarningerror.Rcheck"
+	output, err := rcmdparser.ReadCheckDir(appFS, checkDir)
+	if err != nil {
+		panic(err)
+	}
+	checkResults := rcmdparser.ParseCheckLog(output.Check)
+	fmt.Println(fmt.Sprintf("%v ERRORS, %v WARNINGS, %v NOTES",
+		len(checkResults.Errors), len(checkResults.Warnings), len(checkResults.Notes)))
 }
