@@ -3,7 +3,6 @@ package rcmdparser
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -63,6 +62,5 @@ func ParseTestLog(e []byte) TestResults {
 			break
 		}
 	}
-	fmt.Println(tr)
 	return tr
 }
