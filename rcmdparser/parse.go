@@ -9,7 +9,7 @@ import (
 )
 
 // ParseCheckLog parses the check log
-func ParseCheckLog(e []byte) CheckResults {
+func ParseCheckLog(e []byte) LogEntries {
 	splitOutput := bytes.Split(e, []byte("* "))
 	var errors []string
 	var notes []string
@@ -27,7 +27,7 @@ func ParseCheckLog(e []byte) CheckResults {
 			continue
 		}
 	}
-	return CheckResults{
+	return LogEntries{
 		Errors:   errors,
 		Notes:    notes,
 		Warnings: warnings,

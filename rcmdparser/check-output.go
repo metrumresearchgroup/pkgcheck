@@ -15,7 +15,7 @@ func NewCheck(fs afero.Fs, cd string) (LogResults, error) {
 }
 
 // Parse output to LogResults
-func (c CheckOutput) Parse() LogResults {
+func (c CheckData) Parse() LogResults {
 	lr := LogResults{
 		Checks: ParseCheckLog(c.Check),
 	}

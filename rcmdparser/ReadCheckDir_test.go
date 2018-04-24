@@ -29,28 +29,28 @@ func TestReadCheckDir(t *testing.T) {
 	goutils.WriteLinesFS(testFS, []string{"failed-tests"}, "FailedTest/tests/testthat.Rout.fail")
 	var cdtests = []struct {
 		in       string
-		expected CheckOutput
+		expected CheckData
 	}{
 		{
 			"noTestThat",
-			CheckOutput{
-				TestOutput{true, false, nil},
+			CheckData{
+				TestData{true, false, nil},
 				[]byte("log\n"),
 				[]byte("install\n"),
 			},
 		},
 		{
 			"WithTestThat",
-			CheckOutput{
-				TestOutput{true, true, []byte("tests\n")},
+			CheckData{
+				TestData{true, true, []byte("tests\n")},
 				[]byte("log\n"),
 				[]byte("install\n"),
 			},
 		},
 		{
 			"FailedTest",
-			CheckOutput{
-				TestOutput{true, true, []byte("failed-tests\n")},
+			CheckData{
+				TestData{true, true, []byte("failed-tests\n")},
 				[]byte("log\n"),
 				[]byte("install\n"),
 			},

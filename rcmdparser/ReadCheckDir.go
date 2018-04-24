@@ -18,10 +18,10 @@ import (
 // * (maybe) tests/testthat.Rout.fail
 //
 // cd - Check directory
-func ReadCheckDir(fs afero.Fs, cd string) (CheckOutput, error) {
+func ReadCheckDir(fs afero.Fs, cd string) (CheckData, error) {
 	ok, _ := goutils.DirExists(fs, cd)
 	if !ok {
-		return CheckOutput{}, fmt.Errorf("dir does not exist: %s", cd)
+		return CheckData{}, fmt.Errorf("dir does not exist: %s", cd)
 	}
 	checkFilePath := filepath.Join(cd, "00check.log")
 	installFilePath := filepath.Join(cd, "00install.out")
@@ -29,17 +29,17 @@ func ReadCheckDir(fs afero.Fs, cd string) (CheckOutput, error) {
 	if err != nil {
 		// if the checkfile doesn't exist, most likely something more
 		// drastic went wrong
-		return CheckOutput{}, err
+		return CheckData{}, err
 	}
 
 	install, err := afero.ReadFile(fs, installFilePath)
 	if err != nil {
 		// if the checkfile doesn't exist, most likely something more
 		// drastic went wrong, like missing system dependency
-		return CheckOutput{}, err
+		return CheckData{}, err
 	}
 
-	var test TestOutput
+	var test TestData
 	hasTests, _ := goutils.DirExists(fs, filepath.Join(cd, "tests"))
 	if hasTests {
 		// regular tests
@@ -59,7 +59,7 @@ func ReadCheckDir(fs afero.Fs, cd string) (CheckOutput, error) {
 		}
 	}
 
-	return CheckOutput{
+	return CheckData{
 		Test:    test,
 		Check:   check,
 		Install: install,
