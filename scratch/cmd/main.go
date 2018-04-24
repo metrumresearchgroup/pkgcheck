@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"github.com/sirupsen/logrus"
 
 	"github.com/dpastoor/pkgcheck/rcmdparser"
 	"github.com/spf13/afero"
@@ -9,16 +9,12 @@ import (
 
 func main() {
 	appFS := afero.NewOsFs()
-
+	lg := logrus.New()
 	checkDir := "../../rcmdparser/testdata/testerror.Rcheck"
-	output, err := rcmdparser.ReadCheckDir(appFS, checkDir)
+	results, err := rcmdparser.NewCheck(appFS, checkDir)
 	if err != nil {
 		panic(err)
 	}
-	checkResults := rcmdparser.ParseCheckLog(output.Check)
-	fmt.Println("RCMD CHECK RESULTS: ")
-	fmt.Println(fmt.Sprintf("%v ERRORS, %v WARNINGS, %v NOTES",
-		len(checkResults.Errors), len(checkResults.Warnings), len(checkResults.Notes)))
-	fmt.Println("Test results:")
-	rcmdparser.ParseTestLog(output.Test.Results)
+	results.Log(lg)
+
 }
