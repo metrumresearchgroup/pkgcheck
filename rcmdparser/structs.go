@@ -23,15 +23,26 @@ type TestResults struct {
 	Available bool
 }
 
+// CheckMeta stores metadata about the RCMDCHECK
+type CheckMeta struct {
+	LogDir         string
+	Rversion       string
+	Platform       string
+	Options        string
+	Package        string
+	PackageVersion string
+}
+
 // LogEntries are the parsed results from the check log
 type LogEntries struct {
+	Meta     CheckMeta
 	Errors   []string
 	Warnings []string
 	Notes    []string
 }
 
-// LogResults is a struct of the R CMD check results
-type LogResults struct {
+// CheckResults is a struct of the R CMD check results
+type CheckResults struct {
 	Checks LogEntries
 	Tests  TestResults
 }
