@@ -6,17 +6,17 @@ import (
 
 // NewCheck creates a new CheckOutput Object
 // fs and check directory
-func NewCheck(fs afero.Fs, cd string) (LogResults, error) {
+func NewCheck(fs afero.Fs, cd string) (CheckResults, error) {
 	cr, err := ReadCheckDir(fs, cd)
 	if err != nil {
-		return LogResults{}, err
+		return CheckResults{}, err
 	}
 	return cr.Parse(), nil
 }
 
 // Parse output to LogResults
-func (c CheckData) Parse() LogResults {
-	lr := LogResults{
+func (c CheckData) Parse() CheckResults {
+	lr := CheckResults{
 		Checks: ParseCheckLog(c.Check),
 	}
 	if c.Test.Testthat {

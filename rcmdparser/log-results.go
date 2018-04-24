@@ -8,7 +8,7 @@ import (
 
 // Log the results to the logger
 // Prints at InfoLevel
-func (lr LogResults) Log(lg *logrus.Logger) {
+func (lr CheckResults) Log(lg *logrus.Logger) {
 	cr := lr.Checks
 	tr := lr.Tests
 	lg.Infoln("RCMD CHECK RESULTS: ")
@@ -24,7 +24,7 @@ func (lr LogResults) Log(lg *logrus.Logger) {
 }
 
 // Print the results to stdout
-func (lr LogResults) Print() {
+func (lr CheckResults) Print() {
 	cr := lr.Checks
 	tr := lr.Tests
 	fmt.Println("RCMD CHECK RESULTS: ")
