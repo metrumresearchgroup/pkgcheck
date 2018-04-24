@@ -14,7 +14,7 @@ func ParseCheckLog(e []byte) LogEntries {
 	var errors []string
 	var notes []string
 	var warnings []string
-
+	var meta CheckMeta
 	for _, ent := range splitOutput {
 		switch {
 		case bytes.Contains(ent, []byte("... NOTE")):
@@ -24,10 +24,11 @@ func ParseCheckLog(e []byte) LogEntries {
 		case bytes.Contains(ent, []byte("... WARNING")):
 			warnings = append(warnings, string(ent))
 		default:
-			continue
+			meta.Parse(ent)
 		}
 	}
 	return LogEntries{
+		Meta:     meta,
 		Errors:   errors,
 		Notes:    notes,
 		Warnings: warnings,
