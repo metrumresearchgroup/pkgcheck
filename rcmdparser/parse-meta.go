@@ -2,6 +2,7 @@ package rcmdparser
 
 import (
 	"bytes"
+	"regexp"
 )
 
 // Parse consumes a log entry and updates the check metadata if relevant
@@ -20,8 +21,7 @@ func (cm *CheckMeta) Parse(ent []byte) {
 	case bytes.Contains(ent, []byte("options")):
 		cm.Options = extractBetweenQuotes(ent)
 	case bytes.Contains(ent, []byte("this is package")):
-		cm.Package = ""
-		cm.PackageVersion = ""
+		cm.Package, cm.PackageVersion = parsePackageInfo(ent)
 	default:
 	}
 }
@@ -39,6 +39,21 @@ func extractBetweenQuotes(ent []byte) string {
 	return string(bytes.TrimPrefix(ent[sb:eb], []byte("‘")))
 }
 
+func parsePackageInfo(ent []byte) (string, string) {
+	// this is package ‘test1’ version ‘0.0.1’
+	pi := bytes.Split(ent, []byte("version"))
+	if len(pi) != 2 {
+		// potentially wrong entry passed in
+		return "", ""
+	}
+	return extractBetweenQuotes(pi[0]), extractBetweenQuotes(pi[1])
+}
+
 func parseRVersion(ent []byte) string {
-	return ""
+	rv := regexp.MustCompile("\\d{1}\\.\\d{1}\\.\\d{1}")
+	matches := rv.FindSubmatch(ent)
+	if len(matches) == 0 {
+		return ""
+	}
+	return string(matches[0])
 }
