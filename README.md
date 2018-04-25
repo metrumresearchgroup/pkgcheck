@@ -9,6 +9,8 @@ The initial mechanism for running package checks is through a cli program called
 pkc check <tarball>
 ```
 
+![example01](assets/pkc_example01.png)
+
 ## Development Process
 
 Development past the initial scaffolding will be based on a git-flow style of feature/bug/etc being worked on 
@@ -24,5 +26,5 @@ The following go packages provide
 * cmd - CLI commands
 * configlib - global configuration and settings
 * rcmd - implementation of the rcmds
-* parser - parsing and management of the rcmd outputs
+* rcmdparser - parsing and management of the rcmd outputs
 * db - database of outputs stored from running the rcmdchecks
