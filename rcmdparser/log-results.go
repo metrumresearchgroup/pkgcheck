@@ -11,15 +11,20 @@ import (
 func (lr CheckResults) Log(lg *logrus.Logger) {
 	cr := lr.Checks
 	tr := lr.Tests
-	lg.Infoln("RCMD CHECK RESULTS: ")
-	lg.Infoln(fmt.Sprintf("%v ERRORS, %v WARNINGS, %v NOTES",
-		len(cr.Errors), len(cr.Warnings), len(cr.Notes)))
+	lg.Infof("%s v%s CHECK RESULTS: %v ERRORS, %v WARNINGS, %v NOTES",
+		lr.Checks.Meta.Package,
+		lr.Checks.Meta.PackageVersion,
+		len(cr.Errors), len(cr.Warnings), len(cr.Notes),
+	)
 	if tr.Available {
-		lg.Infoln("TEST RESULTS:")
-		lg.Infoln(fmt.Sprintf("%v OK, %v Skipped, %v Failed",
-			tr.Ok, tr.Skipped, tr.Failed))
+		lg.Infof("%s v%s TEST RESULTS: %v OK, %v Skipped, %v Failed",
+			lr.Checks.Meta.Package,
+			lr.Checks.Meta.PackageVersion,
+			tr.Ok, tr.Skipped, tr.Failed)
 	} else {
-		lg.Infoln("No Tests Present")
+		lg.Infof("%s v%s TEST RESULTS: NO TESTS PRESENT",
+			lr.Checks.Meta.Package,
+			lr.Checks.Meta.PackageVersion)
 	}
 }
 
