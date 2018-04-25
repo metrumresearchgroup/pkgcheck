@@ -16,9 +16,12 @@ package cmd
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/dpastoor/pkgcheck/rcmdparser"
 
 	"github.com/dpastoor/goutils"
 
@@ -44,33 +47,12 @@ var checkCmd = &cobra.Command{
 }
 
 func rCheck(cmd *cobra.Command, args []string) error {
-	// log.SetOutput(f)
-
-	log := logrus.New()
-
-	switch logLevel := viper.GetString("loglevel"); logLevel {
-	case "debug":
-		log.Level = logrus.DebugLevel
-	case "info":
-		log.Level = logrus.InfoLevel
-	case "warn":
-		log.Level = logrus.WarnLevel
-	case "error":
-		log.Level = logrus.ErrorLevel
-	case "fatal":
-		log.Level = logrus.FatalLevel
-	case "panic":
-		log.Level = logrus.PanicLevel
-	default:
-		log.Level = logrus.WarnLevel
-	}
 
 	filterListMap := rcmd.CreateFilterMap(
 		viper.GetStringSlice("whitelist"),
 		viper.GetStringSlice("blacklist"),
 	)
 
-	fs := afero.NewOsFs()
 	csTemplate := rcmd.CheckSettings{
 		OutputDir: viper.GetString("output"),
 		Vanilla:   true,
@@ -213,8 +195,18 @@ func runCheck(
 
 	if err != nil {
 		log.Warnf("failed check for package: %s", cs.Package().Name)
-		return err
 	}
-	log.Infof("completed check for package: %s", cs.Package().Name)
-	return nil
+	checkDir := filepath.Join(cs.OutputDir, strings.Join([]string{
+		cs.Package().Name,
+		"Rcheck",
+	}, "."))
+	ok, _ := goutils.DirExists(fs, checkDir)
+	if ok {
+		checkResults, err := rcmdparser.NewCheck(fs, checkDir)
+		if err != nil {
+			return err
+		}
+		checkResults.Log(log)
+	}
+	return err
 }
