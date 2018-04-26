@@ -57,7 +57,7 @@ maintaining an internal subset of CRAN. On the other hand, revdepcheck will have
 a much different execution environment than that of the depcheck, and should be run less
 frequently. That is to say, only admins managing minicran or package developers should
 need to handle reverse dependency examinations.
-Hence, consideration for the initial rollout could use revdepcheck,
+Hence, consideration for the initial rollout could use `revdepcheck`,
 however should be tracked against `prdd` and using the `pkc` tool itself once the dependency check
 portion is implemented.
 
