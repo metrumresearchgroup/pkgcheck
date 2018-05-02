@@ -15,8 +15,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/dpastoor/goutils"
 	"github.com/dpastoor/pkgcheck/rcmdparser"
 	"github.com/sirupsen/logrus"
@@ -38,7 +36,6 @@ func rSummary(cmd *cobra.Command, args []string) error {
 	ok, _ := goutils.DirExists(fs, checkDir)
 	if ok {
 		checkResults, err := rcmdparser.NewCheck(fs, checkDir)
-		fmt.Println(checkResults)
 		if err != nil {
 			return err
 		}
