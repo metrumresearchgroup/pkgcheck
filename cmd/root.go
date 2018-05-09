@@ -29,7 +29,7 @@ import (
 )
 
 // VERSION is the current pkc version
-const VERSION string = "0.0.2"
+const VERSION string = "0.1.0"
 
 var log *logrus.Logger
 var fs afero.Fs
