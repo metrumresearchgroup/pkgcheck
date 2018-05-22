@@ -15,6 +15,7 @@
 package cmd
 
 import (
+	"path"
 	"strings"
 
 	"github.com/dpastoor/goutils"
@@ -53,7 +54,10 @@ func rSummary(cmd *cobra.Command, args []string) error {
 				checkDirs = append(checkDirs, arg)
 			} else {
 				dirInfo, _ := afero.ReadDir(fs, arg)
-				checkDirs = append(checkDirs, goutils.ListFilesByExt(goutils.ListDirNames(dirInfo), ".Rcheck")...)
+				subcheckDirs := goutils.ListFilesByExt(goutils.ListDirNames(dirInfo), ".Rcheck")
+				for _, d := range subcheckDirs {
+					checkDirs = append(checkDirs, path.Join(arg, d))
+				}
 			}
 		}
 	}
