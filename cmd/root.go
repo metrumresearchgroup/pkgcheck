@@ -20,6 +20,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/afero"
 	"github.com/spf13/viper"
 
 	"github.com/dpastoor/pkgcheck/configlib"
@@ -27,7 +29,10 @@ import (
 )
 
 // VERSION is the current pkc version
-const VERSION string = "0.0.2"
+const VERSION string = "0.1.1"
+
+var log *logrus.Logger
+var fs afero.Fs
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -69,6 +74,27 @@ func init() {
 	viper.BindPFlag("blacklist", RootCmd.PersistentFlags().Lookup("blacklist"))
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
+	// globals
+
+	fs = afero.NewOsFs()
+	log = logrus.New()
+
+	switch logLevel := viper.GetString("loglevel"); logLevel {
+	case "debug":
+		log.Level = logrus.DebugLevel
+	case "info":
+		log.Level = logrus.InfoLevel
+	case "warn":
+		log.Level = logrus.WarnLevel
+	case "error":
+		log.Level = logrus.ErrorLevel
+	case "fatal":
+		log.Level = logrus.FatalLevel
+	case "panic":
+		log.Level = logrus.PanicLevel
+	default:
+		log.Level = logrus.InfoLevel
+	}
 }
 
 // initConfig reads in config file and ENV variables if set.

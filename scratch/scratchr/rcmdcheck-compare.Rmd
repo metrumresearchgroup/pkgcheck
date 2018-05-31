@@ -1,0 +1,20 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+
+```{r}
+library(rcmdcheck)
+```
+
+
+```{r}
+parse_check(file = "../../parser/testdata/testwarning.Rcheck/00check.log")
+```
+
+```{r}
+parse_check(file = "../../parser/testdata/testwarningerror.Rcheck/00check.log")
+```
+
+

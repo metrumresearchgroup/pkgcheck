@@ -1,0 +1,6 @@
+output = "output"
+threads = 4
+loglevel = "debug"
+blacklist = [
+    "testwarningerror"
+]
