@@ -29,7 +29,7 @@ import (
 )
 
 // VERSION is the current pkc version
-const VERSION string = "0.1.1"
+const VERSION string = "0.1.1-rinteractive.1"
 
 var log *logrus.Logger
 var fs afero.Fs
