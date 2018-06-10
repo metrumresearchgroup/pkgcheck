@@ -14,7 +14,7 @@ import (
 // LoadGlobalConfig loads pkgcheck configuration into the global Viper
 func LoadGlobalConfig(configFilename string) error {
 	viper.SetConfigName(configFilename)
-	viper.SetConfigType("toml")
+	viper.SetConfigType("yaml")
 	viper.AutomaticEnv()
 	viper.SetEnvPrefix("pkc")
 	viper.AddConfigPath(".")
@@ -58,7 +58,7 @@ func loadDefaultSettings() {
 	viper.SetDefault("libpaths", "")
 	viper.SetDefault("debug", false)
 	// should be one of Debug,Info,Warn,Error,Fatal,Panic
-	viper.SetDefault("loglevel", "warn")
+	viper.SetDefault("loglevel", "info")
 	// path to R on system, defaults to R in path
 	viper.SetDefault("rpath", "R")
 	viper.SetDefault("output", "output")
