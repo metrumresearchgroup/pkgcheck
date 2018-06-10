@@ -2,7 +2,8 @@
 # Build customization
 project_name: pkc
 
-prerelease: true
+release:
+  prerelease: true
 
 build:
   binary: pkc
