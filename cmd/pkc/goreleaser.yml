@@ -2,6 +2,8 @@
 # Build customization
 project_name: pkc
 
+prerelease: true
+
 build:
   binary: pkc
   goos:
