@@ -84,7 +84,6 @@ func setGlobals() {
 
 	log = logrus.New()
 
-	fmt.Println(viper.GetString("loglevel"))
 	switch logLevel := viper.GetString("loglevel"); logLevel {
 	case "debug":
 		log.Level = logrus.DebugLevel
