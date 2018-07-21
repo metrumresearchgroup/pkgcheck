@@ -4,8 +4,8 @@
 [[projects]]
   name = "github.com/dpastoor/goutils"
   packages = ["."]
-  revision = "b1109ca8c7d0fe327cefc75e82316da1c0a4e3d1"
-  version = "v1.0.2"
+  revision = "6436034546a0262b4ce1a01b82c1ddacc1619609"
+  version = "v1.1.0"
 
 [[projects]]
   name = "github.com/fsnotify/fsnotify"
