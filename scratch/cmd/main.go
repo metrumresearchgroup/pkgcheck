@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/sirupsen/logrus"
 
-	"github.com/dpastoor/pkgcheck/rcmdparser"
+	"github.com/r-infra/pkgcheck/rcmdparser"
 	"github.com/spf13/afero"
 )
 
