@@ -17,7 +17,7 @@ func TestPackageVersion(t *testing.T) {
 			rcmd.Package{Name: "test1", Version: "0.0.1"},
 		},
 		{
-			"testdata/7582a75ff83defed972b348d48b479b8be087f9f.tar.gz",
+			"testdata/pillar/7582a75ff83defed972b348d48b479b8be087f9f.tar.gz",
 			rcmd.Package{Name: "pillar", Version: "1.3.0.9000"},
 		},
 	}
