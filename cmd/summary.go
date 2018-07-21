@@ -19,7 +19,7 @@ import (
 	"strings"
 
 	"github.com/dpastoor/goutils"
-	"github.com/dpastoor/pkgcheck/rcmdparser"
+	"github.com/r-infra/pkgcheck/rcmdparser"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"

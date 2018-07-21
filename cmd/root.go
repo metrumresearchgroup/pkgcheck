@@ -24,12 +24,12 @@ import (
 	"github.com/spf13/afero"
 	"github.com/spf13/viper"
 
-	"github.com/dpastoor/pkgcheck/configlib"
+	"github.com/r-infra/pkgcheck/configlib"
 	"github.com/spf13/cobra"
 )
 
 // VERSION is the current pkc version
-const VERSION string = "0.1.1"
+const VERSION string = "0.2.0-alpha.1"
 
 var log *logrus.Logger
 var fs afero.Fs
@@ -51,7 +51,7 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	cobra.OnInitialize(initConfig, setGlobals)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports Persistent Flags, which, if defined here,
@@ -76,7 +76,12 @@ func init() {
 	// when this action is called directly.
 	// globals
 
+}
+
+func setGlobals() {
+
 	fs = afero.NewOsFs()
+
 	log = logrus.New()
 
 	switch logLevel := viper.GetString("loglevel"); logLevel {

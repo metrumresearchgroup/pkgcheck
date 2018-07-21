@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/dpastoor/pkgcheck/cmd"
+	"github.com/r-infra/pkgcheck/cmd"
 )
 
 // if want to generate docs

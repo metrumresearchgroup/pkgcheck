@@ -21,14 +21,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dpastoor/pkgcheck/rcmdparser"
+	"github.com/r-infra/pkgcheck/rcmdparser"
 
 	"github.com/dpastoor/goutils"
 
 	"github.com/spf13/afero"
 	"github.com/spf13/viper"
 
-	"github.com/dpastoor/pkgcheck/rcmd"
+	"github.com/r-infra/pkgcheck/rcmd"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
