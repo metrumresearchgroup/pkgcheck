@@ -9,11 +9,14 @@ import (
 	"log"
 	"os"
 	"strings"
+
+	"github.com/r-infra/pkgcheck/rcmd"
 )
 
 // PackageVersion returns the package version from the Version field of the DESCRIPTION file
 // This can be useful if a package does not follow the package_version.tar.gz convention
-func PackageVersion(tarpath string) string {
+func PackageInfo(tarpath string) rcmd.Package {
+	output := rcmd.Package{}
 	file, err := os.Open(tarpath)
 	if err != nil {
 		fmt.Println(err)
@@ -43,11 +46,15 @@ func PackageVersion(tarpath string) string {
 
 				// read the current last read line of text
 				l := s.Text()
-				if strings.HasPrefix(l, "Version") {
-					return strings.TrimPrefix(l, "Version: ")
+				if strings.HasPrefix(l, "Version:") {
+					output.Version = strings.TrimPrefix(l, "Version: ")
 				}
+				if strings.HasPrefix(l, "Package:") {
+					output.Name = strings.TrimPrefix(l, "Package: ")
+				}
+
 			}
 		}
 	}
-	return ""
+	return output
 }
