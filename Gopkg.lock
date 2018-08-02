@@ -28,6 +28,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/golang/snappy"
+  packages = ["."]
+  revision = "2e65f85255dbc3072edf28d6b5b8efc472979f5a"
+
+[[projects]]
+  branch = "master"
   name = "github.com/hashicorp/hcl"
   packages = [
     ".",
@@ -55,10 +61,10 @@
   version = "v1.7.6"
 
 [[projects]]
+  branch = "master"
   name = "github.com/mholt/archiver"
   packages = ["."]
-  revision = "cdc68dd1f170b8dfc1a0d2231b5bb0967ed67006"
-  version = "v2.0"
+  revision = "e4ef56d48eb029648b0e895bb0b6a393ef0829c3"
 
 [[projects]]
   branch = "master"
@@ -77,6 +83,15 @@
   packages = ["."]
   revision = "acdc4509485b587f5e675510c4f2c63e90ff68a8"
   version = "v1.1.0"
+
+[[projects]]
+  name = "github.com/pierrec/lz4"
+  packages = [
+    ".",
+    "internal/xxh32"
+  ]
+  revision = "1958fd8fff7f115e79725b1288e0b878b3e06b00"
+  version = "v2.0.3"
 
 [[projects]]
   name = "github.com/sirupsen/logrus"
@@ -171,6 +186,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e194c8b6d812b33673688539295e9a7fdef22dfe3c8ddceed024d519f0f87d78"
+  inputs-digest = "8fd02ad581f510919c4e240d827f6dd2371ef1fe8102cbdf28f75c05a3dac535"
   solver-name = "gps-cdcl"
   solver-version = 1
