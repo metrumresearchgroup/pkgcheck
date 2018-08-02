@@ -29,6 +29,7 @@ func PackageInfo(tarpath string) rcmd.Package {
 	}
 	tr := tar.NewReader(archive)
 
+FILELOOP:
 	for {
 		hdr, err := tr.Next()
 		if err == io.EOF {
@@ -53,6 +54,7 @@ func PackageInfo(tarpath string) rcmd.Package {
 					output.Name = strings.TrimPrefix(l, "Package: ")
 				}
 
+				break FILELOOP
 			}
 		}
 	}
