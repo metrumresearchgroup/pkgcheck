@@ -53,9 +53,8 @@ FILELOOP:
 				if strings.HasPrefix(l, "Package:") {
 					output.Name = strings.TrimPrefix(l, "Package: ")
 				}
-
-				break FILELOOP
 			}
+			break FILELOOP
 		}
 	}
 	return output

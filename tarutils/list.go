@@ -57,10 +57,10 @@ func CopyPkgTars(fs afero.Fs, root string, dest string, fm rcmd.FilterMap) ([]st
 		if len(packageVersion) < 2 {
 			// if not a package this will come back as empty for name/version
 			pm.Details = PackageInfo(t)
+			pm.PackratHashed = true
 		} else {
 			pm.Details.Name = packageVersion[0]
 			pm.Details.Version = packageVersion[1]
-			pm.PackratHashed = true
 		}
 		ok := rcmd.ShouldCheck(pm.Details.Name, fm)
 		if ok {
@@ -111,6 +111,8 @@ func CopyPackratTarball(pm rcmd.Package, p string, dest string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
+	defer newTar.Close()
+
 	err = archiver.TarGz.Write(newTar, []string{newDir})
 	if err != nil {
 		return false, err
