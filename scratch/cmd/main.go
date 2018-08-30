@@ -1,20 +1,21 @@
 package main
 
 import (
+	"github.com/metrumresearchgroup/pkgcheck/rcmd"
 	"github.com/sirupsen/logrus"
 
-	"github.com/r-infra/pkgcheck/rcmdparser"
 	"github.com/spf13/afero"
 )
 
 func main() {
 	appFS := afero.NewOsFs()
 	lg := logrus.New()
-	checkDir := "../../rcmdparser/testdata/testerror.Rcheck"
-	results, err := rcmdparser.NewCheck(appFS, checkDir)
-	if err != nil {
-		panic(err)
-	}
-	results.Log(lg)
+	lg.SetLevel(logrus.DebugLevel)
+	rcmd.RunR(appFS, rcmd.RSettings{
+		LibPaths: []string{},
+		Rpath:    "R",
+	},
+		"/Users/devin/clients/amgen/pdms",
+		lg)
 
 }
