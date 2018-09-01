@@ -25,6 +25,7 @@ func LoadGlobalConfig(configFilename string) error {
 			// found config file but couldn't parse it, should error
 			panic(fmt.Errorf("unable to parse config file with error (%s)", err))
 		}
+		fmt.Println("no config file detected, using default settings")
 	}
 
 	loadDefaultSettings()

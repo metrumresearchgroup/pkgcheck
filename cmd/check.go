@@ -21,14 +21,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/r-infra/pkgcheck/rcmdparser"
+	"github.com/metrumresearchgroup/pkgcheck/rcmdparser"
 
 	"github.com/dpastoor/goutils"
 
 	"github.com/spf13/afero"
 	"github.com/spf13/viper"
 
-	"github.com/r-infra/pkgcheck/rcmd"
+	"github.com/metrumresearchgroup/pkgcheck/rcmd"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -95,7 +95,6 @@ func rCheck(cmd *cobra.Command, args []string) error {
 			dirInfo, _ := afero.ReadDir(fs, arg)
 
 			tarsInDir := goutils.ListFilesByExt(goutils.ListFiles(dirInfo), "tar.gz")
-			// TODO: add black/white list of tars to check against
 
 			if err != nil {
 				log.Printf("issue getting models in dir %s, if this is a run please add the extension. Err: (%s)", arg, err)
@@ -106,7 +105,7 @@ func rCheck(cmd *cobra.Command, args []string) error {
 			for _, tar := range tarsInDir {
 				cs := csTemplate
 				cs.TarPath = tar
-				ok := rcmd.ShouldCheck(cs, filterListMap)
+				ok := rcmd.ShouldCheck(cs.Package().Name, filterListMap)
 				// first ID if going to run check before adding to waitgroup
 				if ok {
 					log.Debugf("adding tarball %s to queue\n", tar)
@@ -121,7 +120,7 @@ func rCheck(cmd *cobra.Command, args []string) error {
 			// figure out if need to do expansion, or run as-is
 			cs := csTemplate
 			cs.TarPath = arg
-			ok := rcmd.ShouldCheck(cs, filterListMap)
+			ok := rcmd.ShouldCheck(cs.Package().Name, filterListMap)
 			// first ID if going to run check before adding to waitgroup
 			if ok {
 				log.Debugf("adding tarball %s to queue\n", arg)

@@ -103,7 +103,7 @@ func TestFilterList(t *testing.T) {
 		},
 	}
 	for _, tt := range packages {
-		actual := ShouldCheck(tt.CheckSettings, tt.FilterList)
+		actual := ShouldCheck(tt.CheckSettings.Package().Name, tt.FilterList)
 		if actual != tt.expected {
 			t.Errorf("GOT: %v, WANT: %v", actual, tt.expected)
 		}

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/r-infra/pkgcheck/cmd"
+	"github.com/metrumresearchgroup/pkgcheck/cmd"
 )
 
 // if want to generate docs

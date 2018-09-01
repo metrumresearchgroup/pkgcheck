@@ -42,9 +42,16 @@ func (cs CheckSettings) Package() Package {
 }
 
 // ShouldCheck returns whether a package should be checked given the filterlist type
-func ShouldCheck(cs CheckSettings, fm FilterMap) bool {
-	pkgName := cs.Package().Name
-	_, ok := fm.Map[pkgName]
+// if no filter map is provided, eg. FilterMap{} the default is true
+func ShouldCheck(name string, fm FilterMap) bool {
+	if name == "" {
+		return false
+	}
+	// if no filtermap set default is to check
+	if fm.Type == "" {
+		return true
+	}
+	_, ok := fm.Map[name]
 	if fm.Type == "whitelist" {
 		return ok
 	}
