@@ -128,7 +128,7 @@ func Check(
 	defer errOutputFileWriter.Flush()
 	err = cmd.Start()
 	if err != nil {
-		lg.Errorf("Error starting Cmd", err)
+		lg.Errorf("Error starting Cmd: %s", err)
 		return err
 	}
 	err = cmd.Wait()
