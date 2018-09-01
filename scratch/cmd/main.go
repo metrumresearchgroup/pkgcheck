@@ -1,17 +1,21 @@
 package main
 
 import (
-	"fmt"
+	"github.com/metrumresearchgroup/pkgcheck/rcmd"
+	"github.com/sirupsen/logrus"
 
-	"github.com/metrumresearchgroup/pkgcheck/tarutils"
+	"github.com/spf13/afero"
 )
 
 func main() {
-	// appFS := afero.NewOsFs()
-	// lg := logrus.New()
-	tars := tarutils.ListTars("/Users/devinp/Downloads/pkglock_snapshot/pkglib/packrat/src")
-	for _, t := range tars {
-		ti := tarutils.PackageInfo(t)
-		fmt.Println(fmt.Sprintf("package: %s, version: %s", ti.Name, ti.Version))
-	}
+	appFS := afero.NewOsFs()
+	lg := logrus.New()
+	lg.SetLevel(logrus.DebugLevel)
+	rcmd.RunR(appFS, rcmd.RSettings{
+		LibPaths: []string{},
+		Rpath:    "R",
+	},
+		"/Users/devin/clients/amgen/pdms",
+		lg)
+
 }
