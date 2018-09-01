@@ -24,7 +24,7 @@ import (
 	"github.com/spf13/afero"
 	"github.com/spf13/viper"
 
-	"github.com/r-infra/pkgcheck/configlib"
+	"github.com/metrumresearchgroup/pkgcheck/configlib"
 	"github.com/spf13/cobra"
 )
 

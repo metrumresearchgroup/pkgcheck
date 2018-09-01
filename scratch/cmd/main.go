@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/r-infra/pkgcheck/tarutils"
+	"github.com/metrumresearchgroup/pkgcheck/tarutils"
 )
 
 func main() {

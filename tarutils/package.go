@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/r-infra/pkgcheck/rcmd"
+	"github.com/metrumresearchgroup/pkgcheck/rcmd"
 )
 
 // PackageVersion returns the package version from the Version field of the DESCRIPTION file

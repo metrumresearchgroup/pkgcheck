@@ -1,6 +1,6 @@
 package tarutils
 
-import "github.com/r-infra/pkgcheck/rcmd"
+import "github.com/metrumresearchgroup/pkgcheck/rcmd"
 
 // PackageTarball gives the package details, and whether the PackageTarball
 // is stored as a hashed package. In the case of github packages, packrat

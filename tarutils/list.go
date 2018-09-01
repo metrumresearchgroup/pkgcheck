@@ -10,7 +10,7 @@ import (
 	"github.com/mholt/archiver"
 
 	"github.com/dpastoor/goutils"
-	"github.com/r-infra/pkgcheck/rcmd"
+	"github.com/metrumresearchgroup/pkgcheck/rcmd"
 	"github.com/spf13/afero"
 )
 

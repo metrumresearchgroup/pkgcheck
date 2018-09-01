@@ -18,8 +18,8 @@ import (
 	"path/filepath"
 
 	"github.com/dpastoor/goutils"
-	"github.com/r-infra/pkgcheck/rcmd"
-	"github.com/r-infra/pkgcheck/tarutils"
+	"github.com/metrumresearchgroup/pkgcheck/rcmd"
+	"github.com/metrumresearchgroup/pkgcheck/tarutils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

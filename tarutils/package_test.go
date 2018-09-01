@@ -3,7 +3,7 @@ package tarutils
 import (
 	"testing"
 
-	"github.com/r-infra/pkgcheck/rcmd"
+	"github.com/metrumresearchgroup/pkgcheck/rcmd"
 )
 
 func TestPackageVersion(t *testing.T) {
